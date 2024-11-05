@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,19 @@ Route::name('auth.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('AuthPages/Dashboard');
     })->name('dashboard');
+
+    // card crud routes
+    Route::resource('card', CardController::class)->only([/*'index',*/'store', 'update', 'destroy'])
+        ->names([
+            // 'index' => 'card.index'
+            'store' => 'card.store', // POST - /card
+            // 'create' => 'card.create', // GET - /card
+            'update' => 'card.update', // PUT/PATCH - /card/{card}
+            'destroy' => 'card.destroy', // DELETE - /card/{card}
+            // 'edit' => 'card.edit', // GET
+        ]);
+
+    Route::delete('/card/{id}', [CardController::class, 'forget'])->name('card.forget'); // forget
 });
 
 
