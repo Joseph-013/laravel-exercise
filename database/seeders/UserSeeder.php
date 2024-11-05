@@ -16,23 +16,23 @@ class UserSeeder extends Seeder
     {
         // Creating a default admin user
         User::create([
-            'name' => 'Admin User',
+            'name' => 'Joseph User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'), // Make sure to hash the password
-            'role' => 'admin',
+            'role' => 'user',
         ]);
 
-        // Creating regular users
-        User::create([
-            'name' => 'Regular User 1',
-            'email' => 'user1@example.com',
-            'password' => Hash::make('password'), // Make sure to hash the password
-        ]);
+        // // Creating regular users
+        // User::create([
+        //     'name' => 'Regular User 1',
+        //     'email' => 'user1@example.com',
+        //     'password' => Hash::make('password'), // Make sure to hash the password
+        // ]);
 
-        User::create([
-            'name' => 'Regular User 2',
-            'email' => 'user2@example.com',
-            'password' => Hash::make('password'), // Make sure to hash the password
-        ]);
+        // User::create([
+        //     'name' => 'Regular User 2',
+        //     'email' => 'user2@example.com',
+        //     'password' => Hash::make('password'), // Make sure to hash the password
+        // ]);
     }
 }
