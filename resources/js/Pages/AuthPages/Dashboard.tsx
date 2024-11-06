@@ -52,7 +52,11 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
         });
     };
 
-    const handleDelete = () => {
+    const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (e.shiftKey) {
+            router.delete(route('auth.card.forget', previewPanel.id));
+            return;
+        }
         router.delete(route('auth.card.delete', previewPanel.id));
     };
 

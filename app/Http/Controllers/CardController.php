@@ -43,6 +43,8 @@ class CardController extends Controller
     public function update(CardRequest $request)
     {
         $validatedData = $request->validated();
+        // dd($validatedData);
+
         $originalCard = Card::find($validatedData['id']);
         /**
          * Update pseudocodes
@@ -72,6 +74,7 @@ class CardController extends Controller
             $image->save(Storage::disk('public')->path($newFilename));
             $validatedData['profile_picture'] = $newFilename;
         }
+
 
         $originalCard->update([
             'profile_picture' => $validatedData['profile_picture'],

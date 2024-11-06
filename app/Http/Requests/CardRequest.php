@@ -24,6 +24,7 @@ class CardRequest extends FormRequest
     {
         return [
             'id' => 'nullable|exists:cards,id',
+            'profile_picture' => 'sometimes|string',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'title' => 'required|string|max:255',
