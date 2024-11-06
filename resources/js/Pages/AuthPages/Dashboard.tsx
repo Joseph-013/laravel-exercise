@@ -1,23 +1,34 @@
 import InputLabelCombo from '@/Components/InputLabelCombo';
 import { Button } from '@/Components/ui/button';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import cards from './cards';
+// import cards from './cards';
 // import { toast } from "sonner"
 
-export default function Dashboard({ notification }: { notification?: string }) {
-    type Card = {
-        id: number;
-        profile_picture: string;
-        profile_picture_file?: File;
-        first_name: string;
-        last_name: string;
-        title: string;
-        id_code: string;
-        contact: string;
-        blood_type: string;
-    };
+type Card = {
+    id: number;
+    profile_picture: string;
+    profile_picture_file?: File;
+    first_name: string;
+    last_name: string;
+    title: string;
+    id_code: string;
+    contact: string;
+    blood_type: string;
+};
+
+export default function Dashboard({
+    notification,
+    cards,
+}: {
+    notification?: string;
+    cards: Card[];
+}) {
+    // if (!notification && errors) {
+    //     const errorArray = Object.values(errors);
+    //     notification = errorArray[0];
+    // }
 
     const [previewPanel, setPreviewPanel] = useState<Card>(structuredClone(cards[0]));
     const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(true);
@@ -27,7 +38,7 @@ export default function Dashboard({ notification }: { notification?: string }) {
             JSON.stringify(previewPanel) ===
                 JSON.stringify(cards.find((value) => value.id === previewPanel.id)),
         );
-    }, [previewPanel]);
+    }, [previewPanel, cards]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -41,8 +52,12 @@ export default function Dashboard({ notification }: { notification?: string }) {
         setPreviewPanel(newCard);
     };
 
-    const handleSave = () => {
-        // router.post()
+    const handleEditSave = () => {
+        // console.log(previewPanel);
+        router.post(route('auth.card.update', { card: previewPanel.id }), previewPanel, {
+            // forceFormData: true,
+            preserveScroll: true,
+        });
     };
 
     const omittedKeys = ['profile_picture'];
@@ -211,10 +226,10 @@ export default function Dashboard({ notification }: { notification?: string }) {
                                         )}
                                         <Button
                                             variant="outline"
-                                            onClick={handleSave}
+                                            onClick={handleEditSave}
                                             disabled={saveButtonDisabled}
                                         >
-                                            Save
+                                            Confirm
                                         </Button>
                                         <Button variant="outline">Delete</Button>
                                     </div>

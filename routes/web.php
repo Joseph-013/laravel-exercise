@@ -17,22 +17,16 @@ Route::get('/', function () {
 })->name('index');
 
 Route::name('auth.')->middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('AuthPages/Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [CardController::class, 'index'])->name('dashboard');
 
     // card crud routes
-    Route::resource('card', CardController::class)->only([/*'index',*/'store', 'update', 'destroy'])
-        ->names([
-            // 'index' => 'card.index'
-            'store' => 'card.store', // POST - /card
-            // 'create' => 'card.create', // GET - /card
-            'update' => 'card.update', // PUT/PATCH - /card/{card}
-            'destroy' => 'card.destroy', // DELETE - /card/{card}
-            // 'edit' => 'card.edit', // GET
-        ]);
-
-    Route::delete('/card/{id}', [CardController::class, 'forget'])->name('card.forget'); // forget
+    Route::controller(CardController::class)->prefix('card')->name('card.')
+        ->group(function () {
+            Route::post('/update', 'update')->name('update');
+            Route::post('/store', 'store')->name('store');
+            Route::delete('/delete/{id}', 'delete')->name('delete');
+            Route::delete('/forget/{id}', 'forget')->name('forget');
+        });
 });
 
 

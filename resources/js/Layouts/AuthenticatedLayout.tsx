@@ -2,8 +2,10 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
+import { Toaster } from '@/Components/ui/sonner';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function Authenticated({
     header,
@@ -11,6 +13,21 @@ export default function Authenticated({
     notification,
 }: PropsWithChildren<{ header?: ReactNode; notification?: string }>) {
     const user = usePage().props.auth.user;
+
+    // const toast = usePage().props.flash.toast;
+    const { errors } = usePage().props;
+    useEffect(() => {
+        const errorArray = Object.values(errors);
+        if (errorArray.length > 0) {
+            console.log(errorArray);
+            toast.error(errorArray);
+        }
+    }, [errors]);
+    // useEffect(() => {
+    //     if (flash.toast) {
+    //         toast(flash.toast);
+    //     }
+    // }, [flash.toast]);
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
@@ -179,6 +196,7 @@ export default function Authenticated({
                     {showNotification && notification}
                 </div>
                 <main className="flex-1 overflow-hidden">{children}</main>
+                <Toaster />
             </div>
             <div className="flex h-screen w-screen items-center justify-center lg:hidden">
                 App is incompatible with devices {'<'}1024 pixels in width.
