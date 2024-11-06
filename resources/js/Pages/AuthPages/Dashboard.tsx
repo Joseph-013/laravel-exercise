@@ -175,7 +175,7 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                             onChange={(e) =>
                                                 setPreviewPanel((prev) => ({
                                                     ...prev,
-                                                    last_name: e.target.value,
+                                                    last_name: e.target.value.toUpperCase(),
                                                 }))
                                             }
                                         />
