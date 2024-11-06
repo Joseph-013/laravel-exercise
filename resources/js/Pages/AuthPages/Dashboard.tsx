@@ -274,7 +274,8 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                                             <span className="font-bold">
                                                                 {key}:
                                                             </span>
-                                                            &nbsp;{value}
+                                                            &nbsp;
+                                                            {value as unknown as React.ReactNode}
                                                         </div>
                                                     ),
                                             )}

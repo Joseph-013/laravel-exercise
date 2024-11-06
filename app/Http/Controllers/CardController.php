@@ -113,7 +113,7 @@ class CardController extends Controller
     {
         Card::withTrashed()->findOrFail($id)->forceDelete();
 
-        // clean 
+        // clean
 
         session()->flash('toast', 'Card permanently deleted.');
 
