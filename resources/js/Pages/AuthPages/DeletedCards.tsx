@@ -1,4 +1,3 @@
-import InputLabelCombo from '@/Components/InputLabelCombo';
 import { Button } from '@/Components/ui/button';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
@@ -18,42 +17,17 @@ type Card = {
 
 export default function Dashboard({ cards }: { cards: Card[] }) {
     const [previewPanel, setPreviewPanel] = useState<Card>(cards[0]);
-    const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(true);
-
-    useEffect(() => {
-        setSaveButtonDisabled(
-            JSON.stringify(previewPanel) ===
-                JSON.stringify(cards.find((value) => value.id === previewPanel.id)),
-        );
-    }, [previewPanel, cards]);
 
     useEffect(() => {
         setPreviewPanel((prev) => cards.find((card) => card.id === prev.id) || cards[0]);
     }, [cards]);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        const newCard: Card = { ...previewPanel };
-        // checks if same filename then reject
-        if (file && file.name !== previewPanel?.profile_picture) {
-            newCard['profile_picture'] = URL.createObjectURL(file);
-            newCard['profile_picture_file'] = file;
-        }
-
-        setPreviewPanel(newCard);
+    const handleRestore = () => {
+        router.patch(route('auth.card.restore', previewPanel.id));
+        // router.patch(`/card/restore/${previewPanel.id}`);
     };
-
-    const handleEditSave = () => {
-        // console.log(previewPanel);
-        router.post(route('auth.card.update', { card: previewPanel.id }), previewPanel, {
-            // forceFormData: true,
-            preserveState: true,
-            preserveScroll: true,
-        });
-    };
-
-    const handleDelete = () => {
-        router.delete(route('auth.card.delete', previewPanel.id));
+    const handleForget = () => {
+        router.delete(route('auth.card.forget', previewPanel.id));
     };
 
     const omittedKeys = ['profile_picture', 'profile_picture_file'];
@@ -62,12 +36,12 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
         <AuthenticatedLayout
             header={
                 <h2 className="flex items-center justify-between text-xl font-semibold leading-tight text-gray-800">
-                    <div>Dashboard</div>
+                    <div>Deleted Cards</div>
                     {/* <Button>+ Add Card</Button> */}
                 </h2>
             }
         >
-            <Head title="Dashboard" />
+            <Head title="Deleted Cards" />
 
             <div className="h-full py-5">
                 <div className="mx-auto h-full max-w-7xl sm:px-6 lg:px-8">
@@ -148,95 +122,12 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                     </div>
                                 </div>
                                 <div className="mt-5">
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <InputLabelCombo
-                                            id="first_name"
-                                            label="First&nbsp;Name"
-                                            type="text"
-                                            value={previewPanel.first_name}
-                                            className="h-8"
-                                            onChange={(e) =>
-                                                setPreviewPanel((prev) => ({
-                                                    ...prev,
-                                                    first_name: e.target.value.toUpperCase(),
-                                                }))
-                                            }
-                                        />
-                                        <InputLabelCombo
-                                            id="last_name"
-                                            label="Last&nbsp;Name"
-                                            type="text"
-                                            className="h-8"
-                                            value={previewPanel.last_name}
-                                            onChange={(e) =>
-                                                setPreviewPanel((prev) => ({
-                                                    ...prev,
-                                                    last_name: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                        <InputLabelCombo
-                                            id="profile_picture"
-                                            label="Profile&nbsp;Picture"
-                                            type="file"
-                                            className="h-8"
-                                            onChange={handleFileChange}
-                                        />
-                                        <InputLabelCombo
-                                            id="title"
-                                            label="Job Title"
-                                            type="text"
-                                            value={previewPanel.title}
-                                            className="h-8"
-                                            onChange={(e) =>
-                                                setPreviewPanel((prev) => ({
-                                                    ...prev,
-                                                    title: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                        <InputLabelCombo
-                                            id="contact"
-                                            label="Contact #"
-                                            type="text"
-                                            value={previewPanel.contact}
-                                            className="h-8"
-                                            onChange={(e) =>
-                                                setPreviewPanel((prev) => ({
-                                                    ...prev,
-                                                    contact: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                        <InputLabelCombo
-                                            id="blood_type"
-                                            label="Blood Type"
-                                            type="text"
-                                            value={previewPanel.blood_type}
-                                            className="h-8"
-                                            onChange={(e) =>
-                                                setPreviewPanel((prev) => ({
-                                                    ...prev,
-                                                    blood_type: e.target.value,
-                                                }))
-                                            }
-                                        />
-                                    </div>
                                     <div className="mt-3 flex items-center justify-end gap-x-3">
-                                        {!saveButtonDisabled && (
-                                            <div className="text-sm text-red-500">
-                                                Unsaved Changes
-                                            </div>
-                                        )}
-                                        <Button
-                                            variant="outline"
-                                            onClick={handleEditSave}
-                                            disabled={saveButtonDisabled}
-                                        >
-                                            Confirm
+                                        <Button variant="outline" onClick={handleRestore}>
+                                            Restore
                                         </Button>
-                                        <Button variant="outline" onClick={handleDelete}>
-                                            Delete
+                                        <Button variant="outline" onClick={handleForget}>
+                                            Forget
                                         </Button>
                                     </div>
                                 </div>

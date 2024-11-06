@@ -25,10 +25,12 @@ class CardSeeder extends Seeder
                 'user_id' => 1,
                 'first_name' => strtoupper(fake()->firstName()),
                 'last_name' => strtoupper(fake()->lastName()),
-                'title' => fake()->jobTitle(),
+                'title' => implode(' ', array_slice(explode(' ', fake()->jobTitle()), 0, 3)),
                 'id_code' => implode('-', str_split(strtoupper(Str::random(8)), 2)),
                 'contact' => '09' . rand(100000000, 999999999),
                 'blood_type' => fake()->bloodGroup(),
+                'created_at' => now(),
+                'deleted_at' => rand(0, 1) ? now() : null
             ]);
         }
     }

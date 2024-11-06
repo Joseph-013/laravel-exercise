@@ -14,4 +14,5 @@ export type PageProps<
         user: User;
     };
     ziggy: Config & { location: string };
+    toast: string | null;
 };

@@ -30,7 +30,8 @@ class CardRequest extends FormRequest
             'id_code' => 'required|string|max:255',
             'contact' => 'required|string|max:255',
             'blood_type' => 'required|string|max:3',
-            'profile_picture_file' => 'sometimes|image|mimes:png,jpg,jpeg|max:2024'
+            // 'profile_picture_file' => 'sometimes|image|mimes:png,jpg,jpeg|max:4048'
+            'profile_picture_file' => 'sometimes|image|mimes:png,jpg,jpeg'
         ];
     }
 }

@@ -10,19 +10,20 @@ import { toast } from 'sonner';
 export default function Authenticated({
     header,
     children,
-    notification,
 }: PropsWithChildren<{ header?: ReactNode; notification?: string }>) {
     const user = usePage().props.auth.user;
 
     // const toast = usePage().props.flash.toast;
-    const { errors } = usePage().props;
+    const pageProps = usePage().props;
     useEffect(() => {
-        const errorArray = Object.values(errors);
+        const errorArray = Object.values(pageProps.errors);
         if (errorArray.length > 0) {
-            console.log(errorArray);
             toast.error(errorArray);
         }
-    }, [errors]);
+        if (pageProps.toast) {
+            toast(pageProps.toast);
+        }
+    }, [pageProps.errors, pageProps.toast]);
     // useEffect(() => {
     //     if (flash.toast) {
     //         toast(flash.toast);
@@ -30,19 +31,6 @@ export default function Authenticated({
     // }, [flash.toast]);
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    const [showNotification, setShowNotification] = useState(false);
-
-    useEffect(() => {
-        if (notification) {
-            setShowNotification(true);
-            const timer = setTimeout(() => {
-                setShowNotification(false);
-            }, 3000); // Show notification for 3 seconds
-
-            // Cleanup timer on component unmount
-            return () => clearTimeout(timer);
-        }
-    }, [notification]);
 
     return (
         <>
@@ -63,6 +51,12 @@ export default function Authenticated({
                                         active={route().current('auth.dashboard')}
                                     >
                                         Dashboard
+                                    </NavLink>
+                                    <NavLink
+                                        href={route('auth.deleted')}
+                                        active={route().current('auth.deleted')}
+                                    >
+                                        Deleted
                                     </NavLink>
                                 </div>
                             </div>
@@ -161,6 +155,12 @@ export default function Authenticated({
                             >
                                 Dashboard
                             </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                href={route('auth.deleted')}
+                                active={route().current('auth.deleted')}
+                            >
+                                Deleted
+                            </ResponsiveNavLink>
                         </div>
 
                         <div className="border-t border-gray-200 pb-1 pt-4">
@@ -190,11 +190,6 @@ export default function Authenticated({
                         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{header}</div>
                     </header>
                 )}
-                <div
-                    className={`absolute inset-x-0 top-0 flex w-screen items-center justify-center bg-cyan-700 text-center text-white transition-all ${showNotification ? 'h-10' : 'h-0'}`}
-                >
-                    {showNotification && notification}
-                </div>
                 <main className="flex-1 overflow-hidden">{children}</main>
                 <Toaster />
             </div>

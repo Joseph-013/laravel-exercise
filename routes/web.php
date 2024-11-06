@@ -6,6 +6,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// storage/image routes
+Route::get('/storage/{filename}')->name('image');
+
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),
@@ -18,13 +21,15 @@ Route::get('/', function () {
 
 Route::name('auth.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [CardController::class, 'index'])->name('dashboard');
+    Route::get('/deleted', [CardController::class, 'index_bin'])->name('deleted');
 
     // card crud routes
     Route::controller(CardController::class)->prefix('card')->name('card.')
         ->group(function () {
             Route::post('/update', 'update')->name('update');
             Route::post('/store', 'store')->name('store');
-            Route::delete('/delete/{id}', 'delete')->name('delete');
+            Route::delete('/delete/{id}', 'destroy')->name('delete');
+            Route::patch('/restore/{id}', 'restore')->name('restore');
             Route::delete('/forget/{id}', 'forget')->name('forget');
         });
 });
