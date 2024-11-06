@@ -227,6 +227,9 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                         />
                                     </div>
                                     <div className="mt-3 flex items-center justify-end gap-x-3">
+                                        <div className="text-xs text-slate-300">
+                                            shift+click delete button to permanent delete
+                                        </div>
                                         {!saveButtonDisabled && (
                                             <div className="text-sm text-red-500">
                                                 Unsaved Changes
