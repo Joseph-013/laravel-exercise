@@ -17,7 +17,7 @@ type Card = {
 };
 
 export default function Dashboard({ cards }: { cards: Card[] }) {
-    const [previewPanel, setPreviewPanel] = useState<Card>(cards[0]);
+    const [previewPanel, setPreviewPanel] = useState<Card>(cards[0] || null);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(true);
 
     useEffect(() => {
@@ -100,7 +100,8 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                                                 ? previewPanel.profile_picture
                                                                 : route(
                                                                       'image',
-                                                                      previewPanel.profile_picture,
+                                                                      previewPanel?.profile_picture ||
+                                                                          'default.jpeg',
                                                                   )
                                                         }
                                                         className="aspect-square h-full w-full rounded-full object-cover object-center"
@@ -154,10 +155,11 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                 <div className="mt-5">
                                     <div className="grid grid-cols-2 gap-2">
                                         <InputLabelCombo
+                                            placeholder="--"
                                             id="first_name"
                                             label="First&nbsp;Name"
                                             type="text"
-                                            value={previewPanel.first_name}
+                                            value={previewPanel?.first_name || ''}
                                             className="h-8"
                                             onChange={(e) =>
                                                 setPreviewPanel((prev) => ({
@@ -167,11 +169,12 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                             }
                                         />
                                         <InputLabelCombo
+                                            placeholder="--"
                                             id="last_name"
                                             label="Last&nbsp;Name"
                                             type="text"
                                             className="h-8"
-                                            value={previewPanel.last_name}
+                                            value={previewPanel?.last_name || ''}
                                             onChange={(e) =>
                                                 setPreviewPanel((prev) => ({
                                                     ...prev,
@@ -185,12 +188,14 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                             type="file"
                                             className="h-8"
                                             onChange={handleFileChange}
+                                            disabled={previewPanel === null}
                                         />
                                         <InputLabelCombo
+                                            placeholder="--"
                                             id="title"
                                             label="Job Title"
                                             type="text"
-                                            value={previewPanel.title}
+                                            value={previewPanel?.title || ''}
                                             className="h-8"
                                             onChange={(e) =>
                                                 setPreviewPanel((prev) => ({
@@ -200,10 +205,11 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                             }
                                         />
                                         <InputLabelCombo
+                                            placeholder="--"
                                             id="contact"
                                             label="Contact #"
                                             type="text"
-                                            value={previewPanel.contact}
+                                            value={previewPanel?.contact || ''}
                                             className="h-8"
                                             onChange={(e) =>
                                                 setPreviewPanel((prev) => ({
@@ -213,10 +219,11 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                             }
                                         />
                                         <InputLabelCombo
+                                            placeholder="--"
                                             id="blood_type"
                                             label="Blood Type"
                                             type="text"
-                                            value={previewPanel.blood_type}
+                                            value={previewPanel?.blood_type || ''}
                                             className="h-8"
                                             onChange={(e) =>
                                                 setPreviewPanel((prev) => ({

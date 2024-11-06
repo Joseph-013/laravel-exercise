@@ -16,7 +16,7 @@ type Card = {
 };
 
 export default function Dashboard({ cards }: { cards: Card[] }) {
-    const [previewPanel, setPreviewPanel] = useState<Card>(cards[0]);
+    const [previewPanel, setPreviewPanel] = useState<Card>(cards[0] || null);
 
     useEffect(() => {
         setPreviewPanel((prev) => cards.find((card) => card.id === prev.id) || cards[0]);
@@ -70,7 +70,8 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                                                 ? previewPanel.profile_picture
                                                                 : route(
                                                                       'image',
-                                                                      previewPanel.profile_picture,
+                                                                      previewPanel?.profile_picture ||
+                                                                          'default.jpeg',
                                                                   )
                                                         }
                                                         className="aspect-square h-full w-full rounded-full object-cover object-center"
@@ -78,12 +79,12 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                                 </div>
                                                 <div className="absolute inset-x-0 top-[67.5%] w-full leading-3">
                                                     <div className="flex h-[1.2em] w-full items-center justify-center truncate bg-white text-lg font-extrabold">
-                                                        {previewPanel.first_name}
+                                                        {previewPanel?.first_name || '--'}
                                                         &nbsp;
-                                                        {previewPanel.last_name}
+                                                        {previewPanel?.last_name}
                                                     </div>
                                                     <div className="flex h-[1em] w-full items-center justify-center bg-white text-sm text-cyan-700">
-                                                        {previewPanel.title}
+                                                        {previewPanel?.title || '--'}
                                                     </div>
                                                 </div>
                                                 <div className="absolute inset-x-0 top-[78.9%] mt-3 flex w-full flex-col gap-y-1 bg-white text-xs">
