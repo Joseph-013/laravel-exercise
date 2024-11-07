@@ -15,7 +15,6 @@ class CardController extends Controller
 {
     public function index(Request $request)
     {
-        // $cards = Auth::user()->cards->makeHidden(['user_id', 'created_at', 'updated_at', 'deleted_at']);
         $cards = CardResource::collection(Auth::user()->cards)->toArray($request);
         return Inertia::render('AuthPages/Dashboard', [
             'cards' => $cards,
@@ -24,7 +23,6 @@ class CardController extends Controller
 
     public function index_bin(Request $request)
     {
-        // $cards = Auth::user()->cards->makeHidden(['user_id', 'created_at', 'updated_at', 'deleted_at']);
         $cards = CardResource::collection(
             Card::where('user_id', Auth::id())->onlyTrashed()->get()
         )->toArray($request);
@@ -51,7 +49,7 @@ class CardController extends Controller
         }
 
         Card::create([
-            'user_id' => Auth::id(),
+            'user_id' => $validatedData['user_id'] ?? Auth::id(),
             'profile_picture' => $validatedData['profile_picture'],
             'first_name' => $validatedData['first_name'],
             'last_name' => $validatedData['last_name'],
@@ -61,27 +59,14 @@ class CardController extends Controller
             'blood_type' => $validatedData['blood_type'],
         ]);
 
-        // $originalCard->update([
-        //     'profile_picture' => $validatedData['profile_picture'],
-        //     'first_name' => $validatedData['first_name'],
-        //     'last_name' => $validatedData['last_name'],
-        //     'title' => $validatedData['title'],
-        //     'id_code' => $validatedData['id_code'],
-        //     'contact' => $validatedData['contact'],
-        //     'blood_type' => $validatedData['blood_type'],
-        // ]);
-        // $originalCard->save();
-
         session()->flash('toast', 'Success');
 
-        // return $this->index($request);
         return redirect()->back();
     }
 
     public function update(CardRequest $request)
     {
         $validatedData = $request->validated();
-        // dd($validatedData);
 
         $originalCard = Card::find($validatedData['id']);
 
@@ -92,7 +77,6 @@ class CardController extends Controller
                 Storage::disk('public')->delete($originalCard->profile_picture);
             }
 
-            // $image = Image::make($file);
             $image = Image::read(file_get_contents($file));
             $image->cover(500, 500, 'center');
 
@@ -116,7 +100,6 @@ class CardController extends Controller
 
         session()->flash('toast', 'Success');
 
-        // return $this->index($request);
         return redirect()->back();
     }
 
@@ -139,8 +122,6 @@ class CardController extends Controller
     public function forget($id)
     {
         Card::withTrashed()->findOrFail($id)->forceDelete();
-
-        // clean
 
         session()->flash('toast', 'Card permanently deleted.');
 

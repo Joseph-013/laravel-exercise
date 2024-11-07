@@ -15,7 +15,7 @@ export default function Login({
     canResetPassword: boolean;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: 'joseph@example.com',
+        email: 'admin@example.com',
         password: 'password',
         remember: true,
     });

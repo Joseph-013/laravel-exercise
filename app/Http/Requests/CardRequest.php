@@ -25,6 +25,7 @@ class CardRequest extends FormRequest
     {
         return [
             'id' => '',
+            'user_id' => '',
             'profile_picture' => 'sometimes|string',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

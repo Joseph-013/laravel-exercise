@@ -7,7 +7,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function Authenticated({
+export default function AuthenticatedAdmin({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode; notification?: string }>) {
@@ -47,14 +47,14 @@ export default function Authenticated({
 
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                     <NavLink
-                                        href={route('auth.dashboard')}
-                                        active={route().current('auth.dashboard')}
+                                        href={route('admin.dashboard')}
+                                        active={route().current('admin.dashboard')}
                                     >
                                         Dashboard
                                     </NavLink>
                                     <NavLink
-                                        href={route('auth.deleted')}
-                                        active={route().current('auth.deleted')}
+                                        href={route('admin.deleted')}
+                                        active={route().current('admin.deleted')}
                                     >
                                         Deleted
                                     </NavLink>
@@ -150,14 +150,14 @@ export default function Authenticated({
                     >
                         <div className="space-y-1 pb-3 pt-2">
                             <ResponsiveNavLink
-                                href={route('auth.dashboard')}
-                                active={route().current('auth.dashboard')}
+                                href={route('admin.dashboard')}
+                                active={route().current('admin.dashboard')}
                             >
                                 Dashboard
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
-                                href={route('auth.deleted')}
-                                active={route().current('auth.deleted')}
+                                href={route('admin.deleted')}
+                                active={route().current('admin.deleted')}
                             >
                                 Deleted
                             </ResponsiveNavLink>
