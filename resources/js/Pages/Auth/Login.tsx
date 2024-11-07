@@ -15,7 +15,7 @@ export default function Login({
     canResetPassword: boolean;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: 'admin@example.com',
+        email: 'joseph@example.com',
         password: 'password',
         remember: true,
     });
@@ -31,11 +31,7 @@ export default function Login({
     return (
         <GuestLayout>
             <Head title="Log in" />
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+            {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
@@ -75,13 +71,9 @@ export default function Login({
                         <Checkbox
                             name="remember"
                             checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
+                            onChange={(e) => setData('remember', e.target.checked)}
                         />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
+                        <span className="ms-2 text-sm text-gray-600">Remember me</span>
                     </label>
                 </div>
 

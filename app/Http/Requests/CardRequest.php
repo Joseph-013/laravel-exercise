@@ -12,6 +12,7 @@ class CardRequest extends FormRequest
     public function authorize(): bool
     {
         $cardId = $this->input('id');
+        if ($cardId == 0) return true;
         return $this->user()->cards()->where('id', $cardId)->exists();
     }
 
@@ -23,7 +24,7 @@ class CardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'nullable|exists:cards,id',
+            'id' => '',
             'profile_picture' => 'sometimes|string',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

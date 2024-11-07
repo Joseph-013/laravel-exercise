@@ -33,11 +33,49 @@ class CardController extends Controller
         ]);
     }
 
-    //store, create, update, destroy
-    public function store(Request $request)
+    public function store(CardRequest $request)
     {
-        dd($request->all());
-        //
+        $validatedData = $request->validated();
+
+        if (isset($validatedData['profile_picture_file'])) {
+            $file = $request->file('profile_picture_file');
+
+            // $image = Image::make($file);
+            $image = Image::read(file_get_contents($file));
+            $image->cover(500, 500, 'center');
+
+
+            $newFilename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $image->save(Storage::disk('public')->path($newFilename));
+            $validatedData['profile_picture'] = $newFilename;
+        }
+
+        Card::create([
+            'user_id' => Auth::id(),
+            'profile_picture' => $validatedData['profile_picture'],
+            'first_name' => $validatedData['first_name'],
+            'last_name' => $validatedData['last_name'],
+            'title' => $validatedData['title'],
+            'id_code' => $validatedData['id_code'],
+            'contact' => $validatedData['contact'],
+            'blood_type' => $validatedData['blood_type'],
+        ]);
+
+        // $originalCard->update([
+        //     'profile_picture' => $validatedData['profile_picture'],
+        //     'first_name' => $validatedData['first_name'],
+        //     'last_name' => $validatedData['last_name'],
+        //     'title' => $validatedData['title'],
+        //     'id_code' => $validatedData['id_code'],
+        //     'contact' => $validatedData['contact'],
+        //     'blood_type' => $validatedData['blood_type'],
+        // ]);
+        // $originalCard->save();
+
+        session()->flash('toast', 'Success');
+
+        // return $this->index($request);
+        return redirect()->back();
     }
 
     public function update(CardRequest $request)
@@ -46,17 +84,6 @@ class CardController extends Controller
         // dd($validatedData);
 
         $originalCard = Card::find($validatedData['id']);
-        /**
-         * Update pseudocodes
-         * - check if file exists; then
-         *      - delete old file
-         *      - process new image: crop to square, reduce size to <= 2048 kb by resizing to 500x500
-         *      - rename to new filename
-         *      - store to storage
-         *      - store to db
-         * - update row with string details
-         * - save row
-         */
 
         if (isset($validatedData['profile_picture_file'])) {
             $file = $request->file('profile_picture_file');

@@ -1,5 +1,13 @@
 import InputLabelCombo from '@/Components/InputLabelCombo';
 import { Button } from '@/Components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/Components/ui/dialog';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
@@ -43,6 +51,8 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
         setPreviewPanel(newCard);
     };
 
+    //
+
     const handleEditSave = () => {
         // console.log(previewPanel);
         router.post(route('auth.card.update', { card: previewPanel.id }), previewPanel, {
@@ -67,7 +77,7 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
             header={
                 <h2 className="flex items-center justify-between text-xl font-semibold leading-tight text-gray-800">
                     <div>Dashboard</div>
-                    {/* <Button>+ Add Card</Button> */}
+                    <NewCardDialog />
                 </h2>
             }
         >
@@ -186,7 +196,7 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                             id="profile_picture"
                                             label="Profile&nbsp;Picture"
                                             type="file"
-                                            className="h-8"
+                                            className="h-8 p-1"
                                             onChange={handleFileChange}
                                             disabled={previewPanel === null}
                                         />
@@ -292,4 +302,140 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
             </div>
         </AuthenticatedLayout>
     );
+
+    function NewCardDialog() {
+        function generateRandomString(length: number = 5): string {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        const [newCard, setNewCard] = useState<Card>({
+            id: 0,
+            profile_picture: 'default.jpeg',
+            // profile_picture_file?: File,
+            first_name: generateRandomString(),
+            last_name: generateRandomString(),
+            title: generateRandomString(),
+            id_code: generateRandomString(),
+            contact: generateRandomString(),
+            blood_type: `${generateRandomString(1)}+`,
+        });
+
+        const handleCreate = () => {
+            router.post(route('auth.card.store'), newCard, {
+                preserveScroll: true,
+                preserveState: true,
+            });
+        };
+
+        return (
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button className="-my-3">+ Create Card</Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Add card details</DialogTitle>
+                        <DialogDescription />
+                        <InputLabelCombo
+                            placeholder="--"
+                            id="first_name"
+                            label="First&nbsp;Name"
+                            type="text"
+                            value={newCard.first_name}
+                            className="h-8"
+                            onChange={(e) =>
+                                setNewCard((prev) => ({
+                                    ...prev,
+                                    first_name: e.target.value.toUpperCase(),
+                                }))
+                            }
+                        />
+                        <InputLabelCombo
+                            placeholder="--"
+                            id="last_name"
+                            label="Last&nbsp;Name"
+                            type="text"
+                            className="h-8"
+                            value={newCard.last_name}
+                            onChange={(e) =>
+                                setNewCard((prev) => ({
+                                    ...prev,
+                                    last_name: e.target.value.toUpperCase(),
+                                }))
+                            }
+                        />
+                        <InputLabelCombo
+                            id="profile_picture"
+                            label="Profile&nbsp;Picture"
+                            type="file"
+                            className="h-8 p-1"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const file = e.target.files?.[0];
+                                const _newCard: Card = { ...newCard };
+                                // checks if same filename then reject
+                                if (file && file.name !== previewPanel?.profile_picture) {
+                                    _newCard['profile_picture'] = URL.createObjectURL(file);
+                                    _newCard['profile_picture_file'] = file;
+                                }
+
+                                setNewCard(_newCard);
+                            }}
+                        />
+                        <InputLabelCombo
+                            placeholder="--"
+                            id="title"
+                            label="Job Title"
+                            type="text"
+                            value={newCard.title}
+                            className="h-8"
+                            onChange={(e) =>
+                                setNewCard((prev) => ({
+                                    ...prev,
+                                    title: e.target.value,
+                                }))
+                            }
+                        />
+                        <InputLabelCombo
+                            placeholder="--"
+                            id="contact"
+                            label="Contact #"
+                            type="text"
+                            value={newCard.contact}
+                            className="h-8"
+                            onChange={(e) =>
+                                setNewCard((prev) => ({
+                                    ...prev,
+                                    contact: e.target.value,
+                                }))
+                            }
+                        />
+                        <InputLabelCombo
+                            placeholder="--"
+                            id="blood_type"
+                            label="Blood Type"
+                            type="text"
+                            value={newCard.blood_type}
+                            className="h-8"
+                            onChange={(e) =>
+                                setNewCard((prev) => ({
+                                    ...prev,
+                                    blood_type: e.target.value,
+                                }))
+                            }
+                        />
+                        <div className="flex justify-end">
+                            <Button variant="secondary" onClick={handleCreate}>
+                                Create
+                            </Button>
+                        </div>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
+        );
+    }
 }

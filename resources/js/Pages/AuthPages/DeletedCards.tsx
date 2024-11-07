@@ -122,16 +122,18 @@ export default function Dashboard({ cards }: { cards: Card[] }) {
                                         </div> */}
                                     </div>
                                 </div>
-                                <div className="mt-5">
-                                    <div className="mt-3 flex items-center justify-end gap-x-3">
-                                        <Button variant="outline" onClick={handleRestore}>
-                                            Restore
-                                        </Button>
-                                        <Button variant="outline" onClick={handleForget}>
-                                            Forget
-                                        </Button>
+                                {previewPanel && (
+                                    <div className="mt-5">
+                                        <div className="mt-3 flex items-center justify-end gap-x-3">
+                                            <Button variant="outline" onClick={handleRestore}>
+                                                Restore
+                                            </Button>
+                                            <Button variant="outline" onClick={handleForget}>
+                                                Forget
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
 
                             {/* right panel */}
