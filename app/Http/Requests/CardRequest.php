@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CardRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class CardRequest extends FormRequest
     public function authorize(): bool
     {
         $cardId = $this->input('id');
-        if ($cardId == 0) return true;
+        if ($cardId == 0 || Auth::user()->role == 'admin') return true;
         return $this->user()->cards()->where('id', $cardId)->exists();
     }
 

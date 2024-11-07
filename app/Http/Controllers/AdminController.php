@@ -12,6 +12,7 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
+        // get all cards for all roles
         $cards = CardResource::collection(Card::all())->toArray($request);
         return Inertia::render('AdminPages/Dashboard', [
             'cards' => $cards,
@@ -20,6 +21,7 @@ class AdminController extends Controller
 
     public function index_bin(Request $request)
     {
+        // get all trashed cards
         $cards = CardResource::collection(
             Card::onlyTrashed()->get()
         )->toArray($request);
