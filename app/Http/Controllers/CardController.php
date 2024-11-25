@@ -105,7 +105,7 @@ class CardController extends Controller
 
     public function restore($id)
     {
-        Card::withTrashed()->findOrFail($id)->restore();
+        Card::onlyTrashed()->findOrFail($id)->restore();
         session()->flash('toast', 'Card restored.');
 
         return redirect()->back();
@@ -113,7 +113,7 @@ class CardController extends Controller
 
     public function destroy($id)
     {
-        Card::withTrashed()->findOrFail($id)->delete();
+        Card::findOrFail($id)->delete();
         session()->flash('toast', 'Card moved to bin.');
 
         return redirect()->back();
@@ -121,7 +121,7 @@ class CardController extends Controller
 
     public function forget($id)
     {
-        Card::withTrashed()->findOrFail($id)->forceDelete();
+        Card::onlyTrashed()->findOrFail($id)->forceDelete();
 
         session()->flash('toast', 'Card permanently deleted.');
 
