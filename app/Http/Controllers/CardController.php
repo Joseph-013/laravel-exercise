@@ -121,7 +121,7 @@ class CardController extends Controller
 
     public function forget($id)
     {
-        Card::onlyTrashed()->findOrFail($id)->forceDelete();
+        Card::withTrashed()->findOrFail($id)->forceDelete();
 
         session()->flash('toast', 'Card permanently deleted.');
 
