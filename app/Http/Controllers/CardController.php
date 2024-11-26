@@ -113,7 +113,7 @@ class CardController extends Controller
 
     public function destroy($id)
     {
-        Card::findOrFail($id)->delete();
+        Card::withTrashed()->findOrFail($id)->delete();
         session()->flash('toast', 'Card moved to bin.');
 
         return redirect()->back();
